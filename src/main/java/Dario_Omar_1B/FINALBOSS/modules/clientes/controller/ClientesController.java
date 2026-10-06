@@ -1,8 +1,10 @@
 package Dario_Omar_1B.FINALBOSS.modules.clientes.controller;
 
+import Dario_Omar_1B.FINALBOSS.modules.clientes.model.dto.ClientesRequestDTO;
 import Dario_Omar_1B.FINALBOSS.modules.clientes.model.dto.ClientesResponseDTO;
 import Dario_Omar_1B.FINALBOSS.modules.clientes.service.ClienteService;
 import Dario_Omar_1B.FINALBOSS.response.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,9 +59,17 @@ public class ClientesController {
         }
     }
 
-    
-
-
-
+    @PostMapping
+    public ResponseEntity<ApiResponse<ClientesResponseDTO>> nuevoCliente(@Valid @RequestBody ClientesRequestDTO json) {
+        try {
+            ClientesResponseDTO dto = service.nuevoCliente(json);
+            ApiResponse<ClientesResponseDTO> response = new ApiResponse<>(true, "Dato Creado con exito", dto);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ApiResponse<ClientesResponseDTO> response = new ApiResponse<>(false, "No se pudo crear el dato", null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
 
 }

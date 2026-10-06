@@ -71,7 +71,7 @@ public class ClienteService {
         return false;
     }
 
-    public ClientesResponseDTO nuevoCliente (@Valid ClientesRequestDTO dto, Long id){
+    public ClientesResponseDTO nuevoCliente (@Valid ClientesRequestDTO dto){
         Cliente datosConvertidos = convertirAENTITY(dto);
 
         Cliente respuesta = repo.save(datosConvertidos);
