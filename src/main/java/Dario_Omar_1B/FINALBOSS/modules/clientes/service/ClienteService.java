@@ -5,13 +5,11 @@ import Dario_Omar_1B.FINALBOSS.modules.clientes.model.dto.ClientesRequestDTO;
 import Dario_Omar_1B.FINALBOSS.modules.clientes.model.dto.ClientesResponseDTO;
 import Dario_Omar_1B.FINALBOSS.modules.clientes.model.entity.Cliente;
 import Dario_Omar_1B.FINALBOSS.modules.clientes.repository.ClienteRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -56,46 +54,35 @@ public class ClienteService {
     }
 
     public ClientesResponseDTO obtenerPorId (Long id){
-        Optional<Cliente> entidadOpcional = repo.findById(id);
-        if (entidadOpcional.isPresent()){
-            return convertirADTOResponse(entidadOpcional.get());
-        }
-        throw new DataNotFoundException("Error No se pudo obtener por ID");
+        Cliente entidad = repo.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("No se encontro el cliente con id " + id));
+        return convertirADTOResponse(entidad);
     }
 
     public boolean eliminar (Long id){
         if (repo.existsById(id)){
             repo.deleteById(id);
+            repo.flush();
             return true;
         }
         return false;
     }
 
-    public ClientesResponseDTO nuevoCliente (@Valid ClientesRequestDTO dto){
-        Cliente datosConvertidos = convertirAENTITY(dto);
-
-        Cliente respuesta = repo.save(datosConvertidos);
-
+    public ClientesResponseDTO nuevoCliente (ClientesRequestDTO dto){
+        Cliente respuesta = repo.saveAndFlush(convertirAENTITY(dto));
         return convertirADTOResponse(respuesta);
     }
 
-    public ClientesResponseDTO actualizarData(@Valid ClientesRequestDTO dto, Long id) {
-        try {
-            Optional<Cliente> registroExistente = repo.findById(id);
-            if (registroExistente.isPresent()) {
-                Cliente entidad = registroExistente.get();
-                entidad.setNombre(dto.getNombre());
-                entidad.setApellido(dto.getApellido());
-                entidad.setEmail(dto.getEmail());
-                entidad.setTelefono(dto.getTelefono());
-                entidad.setDireccion(dto.getDireccion());
+    public ClientesResponseDTO actualizarData(ClientesRequestDTO dto, Long id) {
+        Cliente entidad = repo.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("No se encontro el cliente con id " + id));
 
-                Cliente datosGuardados = repo.save(entidad);
-                return convertirADTOResponse(datosGuardados);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return null;
+        entidad.setNombre(dto.getNombre());
+        entidad.setApellido(dto.getApellido());
+        entidad.setEmail(dto.getEmail());
+        entidad.setTelefono(dto.getTelefono());
+        entidad.setDireccion(dto.getDireccion());
+
+        return convertirADTOResponse(repo.saveAndFlush(entidad));
     }
 }
