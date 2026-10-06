@@ -31,6 +31,11 @@ public class ClienteService {
         ClientesResponseDTO dto = new ClientesResponseDTO();
         dto.setNombre(e.getNombre());
         dto.setApellido(e.getApellido());
+        dto.setTelefono(e.getTelefono());
+        dto.setEmail(e.getEmail());
+        dto.setDireccion(e.getDireccion());
+
+        return dto;
     }
 
 }
