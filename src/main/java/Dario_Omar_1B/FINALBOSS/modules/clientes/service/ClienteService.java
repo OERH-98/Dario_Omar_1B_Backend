@@ -29,6 +29,7 @@ public class ClienteService {
 
     private ClientesResponseDTO convertertirADTOResponse(Cliente e){
         ClientesResponseDTO dto = new ClientesResponseDTO();
+        dto.setId_cliente(e.getId_cliente());
         dto.setNombre(e.getNombre());
         dto.setApellido(e.getApellido());
         dto.setTelefono(e.getTelefono());
