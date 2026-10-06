@@ -6,6 +6,7 @@ import Dario_Omar_1B.FINALBOSS.modules.clientes.service.ClienteService;
 import Dario_Omar_1B.FINALBOSS.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,16 +48,10 @@ public class ClientesController {
     }
 
     @DeleteMapping ("/{id}")
-    public ResponseEntity<ApiResponse<Boolean>> eliminarDatos(@PathVariable Long id){
-        try{
+    public HttpEntity<ApiResponse<Boolean>> eliminarDatos(@PathVariable Long id){
             boolean lista = service.eliminar(id);
             ApiResponse<Boolean> respuestaExitosa = new ApiResponse<>(true,"Se ha eliminado el dato con exito",lista);
-            return ResponseEntity.ok(respuestaExitosa);
-        } catch (Exception e) {
-            e.printStackTrace();
-            ApiResponse<List<ClientesResponseDTO>> respuestaError = new ApiResponse<>(false,"No se pudo eliminar el dato muchacho",null);
-            return null;
-        }
+        return ResponseEntity.ok(respuestaExitosa);
     }
 
     @PostMapping
@@ -72,4 +67,19 @@ public class ClientesController {
         }
     }
 
+    @PutMapping ("/{id}")
+    public ResponseEntity<ClientesRequestDTO> actualizar(@PathVariable Long id, @Valid @RequestBody ClientesRequestDTO dto){
+        try {
+            ClientesResponseDTO data = service.actualizarData(dto, id);
+            if (data != null) {
+                ApiResponse<ClientesRequestDTO> respuestaExito = new ApiResponse<>(true, "Si se pudo actualizar", dto);
+                return ResponseEntity.ok(respuestaExito.getData());
+            }
+            ApiResponse<ClientesResponseDTO> response = new ApiResponse<>(false, "No se pudo actualizar el dato", null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }catch(Exception e){
+                ApiResponse<ClientesResponseDTO> response = new ApiResponse<>(false, "No se pudo actualizar el dato", null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+    }
 }

@@ -79,4 +79,23 @@ public class ClienteService {
         return convertirADTOResponse(respuesta);
     }
 
+    public ClientesResponseDTO actualizarData(@Valid ClientesRequestDTO dto, Long id) {
+        try {
+            Optional<Cliente> registroExistente = repo.findById(id);
+            if (registroExistente.isPresent()) {
+                Cliente entidad = registroExistente.get();
+                entidad.setNombre(dto.getNombre());
+                entidad.setApellido(dto.getApellido());
+                entidad.setEmail(dto.getEmail());
+                entidad.setTelefono(dto.getTelefono());
+                entidad.setDireccion(dto.getDireccion());
+
+                Cliente datosGuardados = repo.save(entidad);
+                return convertirADTOResponse(datosGuardados);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 }
