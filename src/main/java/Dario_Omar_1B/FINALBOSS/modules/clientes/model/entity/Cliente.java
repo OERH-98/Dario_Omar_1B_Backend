@@ -16,7 +16,7 @@ public class Cliente {
     private String apellido;
     @Column(name = "telefono")
     private String telefono;
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
     @Column(name = "direccion")
     private String direccion;

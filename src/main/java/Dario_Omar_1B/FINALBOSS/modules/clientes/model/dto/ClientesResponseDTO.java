@@ -1,5 +1,8 @@
 package Dario_Omar_1B.FINALBOSS.modules.clientes.model.dto;
 
+import lombok.Data;
+
+@Data
 public class ClientesResponseDTO {
     private Long id_cliente;
 
