@@ -1,5 +1,6 @@
 package Dario_Omar_1B.FINALBOSS.modules.clientes.service;
 
+import Dario_Omar_1B.FINALBOSS.exceptions.DataNotFoundException;
 import Dario_Omar_1B.FINALBOSS.modules.clientes.model.dto.ClientesRequestDTO;
 import Dario_Omar_1B.FINALBOSS.modules.clientes.model.dto.ClientesResponseDTO;
 import Dario_Omar_1B.FINALBOSS.modules.clientes.model.entity.Cliente;
@@ -7,9 +8,11 @@ import Dario_Omar_1B.FINALBOSS.modules.clientes.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -52,5 +55,15 @@ public class ClienteService {
 
         return dtos;
     }
+
+    public ClientesResponseDTO obtenerPorId (Long id){
+        Optional<Cliente> entidadOpcional = repo.findById(id);
+        if (entidadOpcional.isPresent()){
+            return convertertirADTOResponse(entidadOpcional.get());
+        }
+        throw new DataNotFoundException("Error No se pudo obtener por ID");
+    }
+
+    
 
 }
