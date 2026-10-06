@@ -1,6 +1,10 @@
 package Dario_Omar_1B.FINALBOSS.response;
 
-public class ApiResponse {
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
+public class ApiResponse <T>{
     public ApiResponse(boolean success, String messaje, T data) {
         this.success = success;
         this.messaje = messaje;
