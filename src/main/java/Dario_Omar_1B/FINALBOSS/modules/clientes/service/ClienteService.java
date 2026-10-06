@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.parser.Entity;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -37,6 +39,18 @@ public class ClienteService {
         dto.setDireccion(e.getDireccion());
 
         return dto;
+    }
+
+    public List<ClientesResponseDTO> obtenerTodos(){
+        List<Cliente> entidades = repo.findAll();
+
+        List<ClientesResponseDTO> dtos = new ArrayList<>();
+
+        for(Cliente entity : entidades){
+            dtos.add(convertertirADTOResponse(entity));
+        }
+
+        return dtos;
     }
 
 }
