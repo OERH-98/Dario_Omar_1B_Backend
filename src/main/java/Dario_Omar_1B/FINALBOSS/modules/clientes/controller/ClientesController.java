@@ -6,10 +6,7 @@ import Dario_Omar_1B.FINALBOSS.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,6 +28,32 @@ public class ClientesController {
             e.printStackTrace();
             ApiResponse<List<ClientesResponseDTO>> respuestaError = new ApiResponse<>(false,"No se pudo obtener los datos muchacho",null);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuestaError);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<ClientesResponseDTO>> obtenerDatosPorId(@PathVariable Long id){
+        try{
+            ClientesResponseDTO lista = service.obtenerPorId(id);
+            ApiResponse<ClientesResponseDTO> respuestaExitosa = new ApiResponse<>(true,"Se ha obtenido los datos con exito muchacho",lista);
+            return ResponseEntity.ok(respuestaExitosa);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ApiResponse<List<ClientesResponseDTO>> respuestaError = new ApiResponse<>(false,"No se pudo obtener los datos muchacho",null);
+            return null;
+        }
+    }
+
+    @DeleteMapping ("/{id}")
+    public ResponseEntity<ApiResponse<Boolean>> eliminarDatos(@PathVariable Long id){
+        try{
+            boolean lista = service.eliminar(id);
+            ApiResponse<Boolean> respuestaExitosa = new ApiResponse<>(true,"Se ha eliminado el dato con exito",lista);
+            return ResponseEntity.ok(respuestaExitosa);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ApiResponse<List<ClientesResponseDTO>> respuestaError = new ApiResponse<>(false,"No se pudo eliminar el dato muchacho",null);
+            return null;
         }
     }
 

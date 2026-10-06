@@ -8,8 +8,6 @@ import Dario_Omar_1B.FINALBOSS.modules.clientes.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +62,14 @@ public class ClienteService {
         throw new DataNotFoundException("Error No se pudo obtener por ID");
     }
 
-    
+    public boolean eliminar (Long id){
+        if (repo.existsById(id)){
+            repo.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+
 
 }
