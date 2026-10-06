@@ -5,6 +5,7 @@ import Dario_Omar_1B.FINALBOSS.modules.clientes.model.dto.ClientesRequestDTO;
 import Dario_Omar_1B.FINALBOSS.modules.clientes.model.dto.ClientesResponseDTO;
 import Dario_Omar_1B.FINALBOSS.modules.clientes.model.entity.Cliente;
 import Dario_Omar_1B.FINALBOSS.modules.clientes.repository.ClienteRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class ClienteService {
         return entity;
     }
 
-    private ClientesResponseDTO convertertirADTOResponse(Cliente e){
+    private ClientesResponseDTO convertirADTOResponse(Cliente e){
         ClientesResponseDTO dto = new ClientesResponseDTO();
         dto.setId_cliente(e.getId_cliente());
         dto.setNombre(e.getNombre());
@@ -48,7 +49,7 @@ public class ClienteService {
         List<ClientesResponseDTO> dtos = new ArrayList<>();
 
         for(Cliente entity : entidades){
-            dtos.add(convertertirADTOResponse(entity));
+            dtos.add(convertirADTOResponse(entity));
         }
 
         return dtos;
@@ -57,7 +58,7 @@ public class ClienteService {
     public ClientesResponseDTO obtenerPorId (Long id){
         Optional<Cliente> entidadOpcional = repo.findById(id);
         if (entidadOpcional.isPresent()){
-            return convertertirADTOResponse(entidadOpcional.get());
+            return convertirADTOResponse(entidadOpcional.get());
         }
         throw new DataNotFoundException("Error No se pudo obtener por ID");
     }
@@ -70,6 +71,12 @@ public class ClienteService {
         return false;
     }
 
+    public ClientesResponseDTO nuevoCliente (@Valid ClientesRequestDTO dto, Long id){
+        Cliente datosConvertidos = convertirAENTITY(dto);
 
+        Cliente respuesta = repo.save(datosConvertidos);
+
+        return convertirADTOResponse(respuesta);
+    }
 
 }
